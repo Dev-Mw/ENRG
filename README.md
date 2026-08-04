@@ -24,6 +24,7 @@ ENRG/
 ├── quarantine/                # Registros problemáticos con diagnóstico     <-- Se genera en ejecución
 ├── reports/                   # quality_report_<timestamp>.json             <-- Se genera en ejecución
 ├── output/                    # Salida del agente                           <-- Se genera en ejecución
+├── html/                      # Contiene información acerca del proceso completo
 ├── data_queries.py            # Capa de consulta — toda cifra viene de aquí
 ├── agent.py                   # LUMI mini-agente CLI
 ├── run_pipeline.py            # Punto de entrada del pipeline
