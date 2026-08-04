@@ -1,0 +1,4 @@
+cliente_id,razon_social,industria,ciudad,horario_operacion,tipo_tarifa,sistema_solar,equipos_principales
+CLI-001,Textiles del Valle S.A.S,Textil - Tejeduría,Yumbo,L-S 06:00-22:00 (2 turnos),No regulado - Nivel 2,No,"12 telares rapier (45 kW c/u), 2 compresores tornillo 75 kW, chiller 120 kW"
+CLI-002,Frigorífico Andino S.A,Alimentos - Refrigeración,Medellín,24/7,No regulado - Nivel 3,Sí - 380 kWp instalados (2024),"4 compresores amoniaco 90 kW, túnel congelación 150 kW, 6 cuartos fríos"
+CLI-003,Clínica Santa Elena,Salud - Hospitalario,Barranquilla,"24/7, quirófanos L-V 07:00-19:00",Regulado,En evaluación,"3 chillers 200 TR, 2 UPS 100 kVA, planta emergencia 500 kVA, equipos imagenología"

@@ -216,3 +216,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Erco
+.idea/
+img/
+quarantine/
+bronze/data/
+silver/data/
+reports/
+eda.py
+insights.py

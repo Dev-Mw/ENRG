@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitectura ENRG — ERCO Energía</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --green:    #1B7A3E;
+    --green-m:  #2E9E55;
+    --green-l:  #E6F4EC;
+    --slate:    #1C2B3A;
+    --slate-m:  #2E4057;
+    --slate-l:  #EEF2F6;
+    --amber:    #D97706;
+    --amber-l:  #FEF3C7;
+    --red:      #B91C1C;
+    --red-l:    #FEE2E2;
+    --blue:     #1D4ED8;
+    --blue-l:   #DBEAFE;
+    --purple:   #7C3AED;
+    --purple-l: #EDE9FE;
+    --rule:     #D1D5DB;
+    --paper:    #F9FAFB;
+    --white:    #FFFFFF;
+    --ink:      #111827;
+    --mid:      #6B7280;
+    --mono:     'Space Mono', monospace;
+    --sans:     'Space Grotesk', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--paper);
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 48px 36px 80px;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: var(--slate);
+    color: var(--white);
+    padding: 48px 48px 40px;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: var(--green-m);
+    opacity: 0.08;
+  }
+  .cover-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--green-m);
+    margin-bottom: 12px;
+  }
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+  .cover .sub {
+    font-size: 15px;
+    color: #9CA3AF;
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item { font-size: 13px; color: #9CA3AF; }
+  .cover-meta-item strong { display: block; color: var(--white); font-size: 15px; margin-top: 2px; }
+
+  /* ── Section ── */
+  .section { margin: 52px 0 28px; }
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--green);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--green);
+    padding-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 10px;
+    color: var(--slate);
+  }
+
+  /* ── Prose ── */
+  p { margin-bottom: 10px; color: #374151; }
+  p strong { color: var(--ink); }
+
+  /* ── Diagrams ── */
+  .diagram-wrap {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .diagram-caption {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--mid);
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* ── Layer cards ── */
+  .layers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .layer-card {
+    border: 1px solid var(--rule);
+    border-top: 4px solid;
+    padding: 16px;
+    background: var(--white);
+    border-radius: 0 0 4px 4px;
+  }
+  .layer-card.landing { border-top-color: #6B7280; }
+  .layer-card.bronze  { border-top-color: #B45309; }
+  .layer-card.silver  { border-top-color: #6B7280; }
+  .layer-card.gold    { border-top-color: #D97706; }
+
+  .layer-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .layer-card.landing .layer-name { color: #6B7280; }
+  .layer-card.bronze  .layer-name { color: #B45309; }
+  .layer-card.silver  .layer-name { color: #374151; }
+  .layer-card.gold    .layer-name { color: #D97706; }
+
+  .layer-card ul {
+    list-style: none;
+    font-size: 12px;
+    color: var(--mid);
+    line-height: 1.8;
+  }
+  .layer-card ul li::before { content: "→ "; color: var(--green); }
+
+  /* ── Decision table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  th {
+    background: var(--slate);
+    color: var(--white);
+    padding: 9px 12px;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--slate-l); }
+
+  /* ── Tradeoff boxes ── */
+  .tradeoff-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .tradeoff-box {
+    padding: 16px 18px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .tradeoff-box.pro  { background: var(--green-l); border-left: 3px solid var(--green); }
+  .tradeoff-box.con  { background: var(--amber-l); border-left: 3px solid var(--amber); }
+  .tradeoff-box h4   { font-size: 12px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tradeoff-box.pro h4 { color: var(--green); }
+  .tradeoff-box.con h4 { color: var(--amber); }
+  .tradeoff-box ul   { list-style: none; color: #374151; }
+  .tradeoff-box ul li { margin-bottom: 4px; }
+  .tradeoff-box.pro ul li::before { content: "✓ "; color: var(--green); }
+  .tradeoff-box.con ul li::before { content: "⚠ "; color: var(--amber); }
+
+  /* ── Flow steps (E2E example) ── */
+  .flow-steps { margin: 20px 0; }
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .flow-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--slate);
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .flow-step.highlight .flow-num { background: var(--green); }
+  .flow-content { font-size: 13px; color: #374151; }
+  .flow-content strong { color: var(--ink); font-size: 13px; }
+  .flow-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .flow-tag.athena  { background: var(--blue-l);   color: var(--blue); }
+  .flow-tag.llm     { background: var(--purple-l); color: var(--purple); }
+  .flow-tag.check   { background: var(--green-l);  color: var(--green); }
+  .flow-tag.guard   { background: var(--red-l);    color: var(--red); }
+
+  /* ── Roadmap ── */
+  .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+  .roadmap-phase {
+    border: 1px solid var(--rule);
+    border-top: 4px solid;
+    padding: 18px;
+    background: var(--white);
+  }
+  .roadmap-phase.p1 { border-top-color: var(--green); }
+  .roadmap-phase.p2 { border-top-color: var(--blue); }
+  .roadmap-phase.p3 { border-top-color: var(--purple); }
+  .roadmap-phase .phase-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .roadmap-phase.p1 .phase-label { color: var(--green); }
+  .roadmap-phase.p2 .phase-label { color: var(--blue); }
+  .roadmap-phase.p3 .phase-label { color: var(--purple); }
+  .roadmap-phase h4  { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .roadmap-phase ul  { list-style: none; font-size: 12px; color: var(--mid); line-height: 1.9; }
+  .roadmap-phase ul li::before { content: "· "; font-weight: 700; }
+  .roadmap-phase .why {
+    margin-top: 12px;
+    padding: 8px 10px;
+    background: var(--slate-l);
+    font-size: 11px;
+    color: var(--slate-m);
+    border-radius: 2px;
+    font-style: italic;
+  }
+
+  /* ── Inline code ── */
+  code {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--slate-l);
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--slate);
+  }
+
+  /* ── Badge ── */
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+  .badge.aws    { background: #FFF7ED; color: #C2410C; }
+  .badge.dbt    { background: var(--green-l); color: var(--green); }
+  .badge.ai     { background: var(--purple-l); color: var(--purple); }
+  .badge.sec    { background: var(--red-l); color: var(--red); }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-size: 11px;
+    color: var(--mid);
+    font-family: var(--mono);
+  }
+</style>
+</head>
+<body>
+
+<!-- ── COVER ── -->
+<div class="cover">
+  <div class="cover-eyebrow">ERCO ENERGÍA · PLATAFORMA ENRG · PARTE B</div>
+  <h1>Diseño de Arquitectura<br>Datalake + Sistema IA</h1>
+  <div class="sub">Documento técnico — Prueba Técnica Líder de Datos e Inteligencia Artificial</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">Stack de referencia<strong>AWS · dbt · LangGraph</strong></div>
+    <div class="cover-meta-item">Fuentes de datos<strong>Telemedida · Clientes · Documentos</strong></div>
+    <div class="cover-meta-item">Agente<strong>LUMI sobre capa Gold</strong></div>
+    <div class="cover-meta-item">Roadmap<strong>3 personas · 6 meses</strong></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+  SECCIÓN 1 — DATALAKE
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Sección 1 de 4</div>
+  <h2>Datalake — Arquitectura por capas en AWS</h2>
+</div>
+
+<p>El datalake consolida tres tipos de fuentes con naturalezas muy distintas: <strong>telemedida horaria</strong> (alta frecuencia, ruidosa, de campo), <strong>contexto de clientes</strong> (baja frecuencia, semiestructurado) y <strong>documentos no estructurados</strong> (datasheets de máquinas, manuales técnicos, contratos). La separación en capas permite que cada fuente avance a su propio ritmo de calidad sin bloquear a las demás.</p>
+
+<!-- Diagrama SVG: arquitectura de capas -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 920 340" xmlns="http://www.w3.org/2000/svg" font-family="'Space Grotesk', sans-serif">
+
+  <!-- Fondo capas -->
+  <!-- Landing -->
+  <rect x="10" y="10" width="180" height="320" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1.5"/>
+  <text x="100" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#6B7280" letter-spacing="1">LANDING</text>
+
+  <!-- Bronze -->
+  <rect x="202" y="10" width="180" height="320" rx="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+  <text x="292" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#B45309" letter-spacing="1">BRONZE</text>
+
+  <!-- Silver -->
+  <rect x="394" y="10" width="180" height="320" rx="4" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="2"/>
+  <text x="484" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#374151" letter-spacing="1">SILVER</text>
+
+  <!-- Gold -->
+  <rect x="586" y="10" width="180" height="320" rx="4" fill="#FFFBEB" stroke="#D97706" stroke-width="2.5"/>
+  <text x="676" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#D97706" letter-spacing="1">GOLD</text>
+
+  <!-- AI layer -->
+  <rect x="778" y="10" width="132" height="320" rx="4" fill="#EDE9FE" stroke="#7C3AED" stroke-width="2"/>
+  <text x="844" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED" letter-spacing="1">IA / APP</text>
+
+  <!-- ─ Fila 1: Telemedida ─ -->
+  <rect x="22" y="48" width="156" height="52" rx="3" fill="white" stroke="#D1D5DB"/>
+  <text x="100" y="67" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Medidores campo</text>
+  <text x="100" y="81" text-anchor="middle" font-size="9" fill="#6B7280">CSV · MQTT · API</text>
+  <text x="100" y="94" text-anchor="middle" font-size="9" fill="#6B7280">horario / diario</text>
+
+  <rect x="214" y="48" width="156" height="52" rx="3" fill="white" stroke="#D97706" stroke-width="1.2"/>
+  <text x="292" y="67" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Raw sin pérdida</text>
+  <text x="292" y="81" text-anchor="middle" font-size="9" fill="#6B7280">+ _ingested_at</text>
+  <text x="292" y="94" text-anchor="middle" font-size="9" fill="#6B7280">+ _source_hash</text>
+
+  <rect x="406" y="48" width="156" height="52" rx="3" fill="white" stroke="#9CA3AF" stroke-width="1.2"/>
+  <text x="484" y="67" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Limpio + validado</text>
+  <text x="484" y="81" text-anchor="middle" font-size="9" fill="#6B7280">Wh→kWh · dups · gaps</text>
+  <text x="484" y="94" text-anchor="middle" font-size="9" fill="#6B7280">quarantine separado</text>
+
+  <rect x="598" y="48" width="156" height="52" rx="3" fill="white" stroke="#D97706" stroke-width="1.5"/>
+  <text x="676" y="67" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Métricas agregadas</text>
+  <text x="676" y="81" text-anchor="middle" font-size="9" fill="#6B7280">consumo_diario · mensual</text>
+  <text x="676" y="94" text-anchor="middle" font-size="9" fill="#6B7280">rankings · benchmarks</text>
+
+  <!-- ─ Fila 2: Contexto clientes ─ -->
+  <rect x="22" y="118" width="156" height="52" rx="3" fill="white" stroke="#D1D5DB"/>
+  <text x="100" y="137" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">CRM / manual</text>
+  <text x="100" y="151" text-anchor="middle" font-size="9" fill="#6B7280">CSV · formulario</text>
+  <text x="100" y="164" text-anchor="middle" font-size="9" fill="#6B7280">mensual / evento</text>
+
+  <rect x="214" y="118" width="156" height="52" rx="3" fill="white" stroke="#D97706" stroke-width="1.2"/>
+  <text x="292" y="137" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Raw cliente</text>
+  <text x="292" y="151" text-anchor="middle" font-size="9" fill="#6B7280">+ metadatos ingesta</text>
+  <text x="292" y="164" text-anchor="middle" font-size="9" fill="#6B7280">versión histórica</text>
+
+  <rect x="406" y="118" width="156" height="52" rx="3" fill="white" stroke="#9CA3AF" stroke-width="1.2"/>
+  <text x="484" y="137" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Normalizado</text>
+  <text x="484" y="151" text-anchor="middle" font-size="9" fill="#6B7280">tiene_solar (bool)</text>
+  <text x="484" y="164" text-anchor="middle" font-size="9" fill="#6B7280">horario parseado</text>
+
+  <rect x="598" y="118" width="156" height="52" rx="3" fill="white" stroke="#D97706" stroke-width="1.5"/>
+  <text x="676" y="137" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Perfil enriquecido</text>
+  <text x="676" y="151" text-anchor="middle" font-size="9" fill="#6B7280">join con telemedida</text>
+  <text x="676" y="164" text-anchor="middle" font-size="9" fill="#6B7280">segmento · tarifa</text>
+
+  <!-- ─ Fila 3: Documentos ─ -->
+  <rect x="22" y="188" width="156" height="52" rx="3" fill="white" stroke="#D1D5DB"/>
+  <text x="100" y="207" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Datasheets / manuales</text>
+  <text x="100" y="221" text-anchor="middle" font-size="9" fill="#6B7280">PDF · DOCX · imagen</text>
+  <text x="100" y="234" text-anchor="middle" font-size="9" fill="#6B7280">upload manual</text>
+
+  <rect x="214" y="188" width="156" height="52" rx="3" fill="white" stroke="#D97706" stroke-width="1.2"/>
+  <text x="292" y="207" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Binarios en S3</text>
+  <text x="292" y="221" text-anchor="middle" font-size="9" fill="#6B7280">hash · mime_type</text>
+  <text x="292" y="234" text-anchor="middle" font-size="9" fill="#6B7280">cliente_id tag</text>
+
+  <rect x="406" y="188" width="156" height="52" rx="3" fill="white" stroke="#9CA3AF" stroke-width="1.2"/>
+  <text x="484" y="207" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Texto extraído</text>
+  <text x="484" y="221" text-anchor="middle" font-size="9" fill="#6B7280">chunks indexados</text>
+  <text x="484" y="234" text-anchor="middle" font-size="9" fill="#6B7280">OpenSearch / pgvector</text>
+
+  <rect x="598" y="188" width="156" height="52" rx="3" fill="white" stroke="#D97706" stroke-width="1.5"/>
+  <text x="676" y="207" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">Embeddings listos</text>
+  <text x="676" y="221" text-anchor="middle" font-size="9" fill="#6B7280">retrieval por cliente_id</text>
+  <text x="676" y="234" text-anchor="middle" font-size="9" fill="#6B7280">+ metadata equipo</text>
+
+  <!-- ─ Fila 4: Orquestación ─ -->
+  <rect x="22" y="258" width="540" height="60" rx="3" fill="#1C2B3A" stroke="#374151"/>
+  <text x="292" y="278" text-anchor="middle" font-size="10" fill="white" font-weight="600">ORQUESTACIÓN · CALIDAD · GOBIERNO</text>
+  <text x="292" y="294" text-anchor="middle" font-size="9" fill="#9CA3AF">Step Functions  ·  Glue Data Catalog  ·  dbt tests  ·  CloudWatch alerts  ·  IAM por cliente</text>
+  <text x="292" y="308" text-anchor="middle" font-size="9" fill="#9CA3AF">Linaje: _source_hash · _ingested_at · _row_number  en cada capa</text>
+
+  <!-- ─ App layer ─ -->
+  <rect x="790" y="48" width="108" height="64" rx="3" fill="white" stroke="#7C3AED" stroke-width="1.5"/>
+  <text x="844" y="68" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">LUMI</text>
+  <text x="844" y="82" text-anchor="middle" font-size="9" fill="#6B7280">Agente IA</text>
+  <text x="844" y="96" text-anchor="middle" font-size="9" fill="#6B7280">LangGraph</text>
+
+  <rect x="790" y="124" width="108" height="52" rx="3" fill="white" stroke="#7C3AED" stroke-width="1.5"/>
+  <text x="844" y="143" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">ENRG App</text>
+  <text x="844" y="157" text-anchor="middle" font-size="9" fill="#6B7280">Dashboard</text>
+  <text x="844" y="170" text-anchor="middle" font-size="9" fill="#6B7280">Reportes</text>
+
+  <rect x="790" y="188" width="108" height="52" rx="3" fill="white" stroke="#7C3AED" stroke-width="1.5"/>
+  <text x="844" y="207" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">API REST</text>
+  <text x="844" y="221" text-anchor="middle" font-size="9" fill="#6B7280">Lambda +</text>
+  <text x="844" y="234" text-anchor="middle" font-size="9" fill="#6B7280">API Gateway</text>
+
+  <!-- ─ Flechas entre capas ─ -->
+  <defs>
+    <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+    <marker id="arr-g" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#1B7A3E"/>
+    </marker>
+  </defs>
+
+  <!-- Fila 1 -->
+  <line x1="178" y1="74" x2="212" y2="74" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="370" y1="74" x2="404" y2="74" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="562" y1="74" x2="596" y2="74" stroke="#1B7A3E" stroke-width="2" marker-end="url(#arr-g)"/>
+  <line x1="754" y1="74" x2="788" y2="80" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Fila 2 -->
+  <line x1="178" y1="144" x2="212" y2="144" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="370" y1="144" x2="404" y2="144" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="562" y1="144" x2="596" y2="144" stroke="#1B7A3E" stroke-width="2" marker-end="url(#arr-g)"/>
+  <line x1="754" y1="150" x2="788" y2="150" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Fila 3 -->
+  <line x1="178" y1="214" x2="212" y2="214" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="370" y1="214" x2="404" y2="214" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="562" y1="214" x2="596" y2="214" stroke="#1B7A3E" stroke-width="2" marker-end="url(#arr-g)"/>
+  <line x1="754" y1="214" x2="788" y2="214" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arr)"/>
+
+</svg>
+<div class="diagram-caption">Fig. 1 — Arquitectura datalake por capas. Las flechas verdes indican la transición hacia gold, donde los datos son consumibles por el agente y la app.</div>
+</div>
+
+<div class="layers">
+  <div class="layer-card landing">
+    <div class="layer-name">Landing</div>
+    <ul>
+      <li>S3 bucket raw</li>
+      <li>Trigger S3 event</li>
+      <li>Sin transformación</li>
+      <li>Retención: 90 días</li>
+      <li>Partición: fuente/fecha</li>
+    </ul>
+  </div>
+  <div class="layer-card bronze">
+    <div class="layer-name">Bronze</div>
+    <ul>
+      <li>Parquet sin pérdida</li>
+      <li>+_ingested_at, _hash</li>
+      <li>+_row_number (linaje)</li>
+      <li>Glue Job (Spark)</li>
+      <li>Catálogo automático</li>
+    </ul>
+  </div>
+  <div class="layer-card silver">
+    <div class="layer-name">Silver</div>
+    <ul>
+      <li>Reglas de calidad</li>
+      <li>Quarantine separado</li>
+      <li>dbt tests como contrato</li>
+      <li>Athena-queryable</li>
+      <li>Alertas SNS si falla</li>
+    </ul>
+  </div>
+  <div class="layer-card gold">
+    <div class="layer-name">Gold</div>
+    <ul>
+      <li>Modelos dbt agregados</li>
+      <li>Join tele + contexto</li>
+      <li>Embeddings documentos</li>
+      <li>Vistas por cliente_id</li>
+      <li>Base del agente LUMI</li>
+    </ul>
+  </div>
+</div>
+
+<h3>Decisiones de arquitectura y trade-offs</h3>
+<table>
+  <tr><th>Decisión</th><th>Opción elegida</th><th>Alternativa descartada</th><th>Razón</th></tr>
+  <tr>
+    <td>Formato de almacenamiento</td>
+    <td><span class="badge aws">Parquet + S3</span></td>
+    <td>CSV comprimido</td>
+    <td>Columnar: Athena lee solo las columnas necesarias, 10× más barato en queries analíticas</td>
+  </tr>
+  <tr>
+    <td>Orquestación</td>
+    <td><span class="badge aws">Step Functions</span></td>
+    <td>Airflow en EC2</td>
+    <td>Serverless, nativo AWS, reintentos y ramas condicionales sin infraestructura que mantener</td>
+  </tr>
+  <tr>
+    <td>Transformaciones</td>
+    <td><span class="badge dbt">dbt + Athena</span></td>
+    <td>PySpark puro</td>
+    <td>dbt tests son el contrato de calidad; SQL es legible por el equipo de negocio</td>
+  </tr>
+  <tr>
+    <td>Documentos no estructurados</td>
+    <td><span class="badge aws">S3 + OpenSearch</span></td>
+    <td>Solo S3 con Lambda</td>
+    <td>OpenSearch permite búsqueda semántica con embeddings; escala sin rediseñar el pipeline</td>
+  </tr>
+  <tr>
+    <td>Gobierno de accesos</td>
+    <td><span class="badge aws">IAM + Lake Formation</span></td>
+    <td>ACLs manuales en S3</td>
+    <td>Lake Formation permite control a nivel de columna y fila — crítico para datos de energía de múltiples clientes</td>
+  </tr>
+</table>
+
+<h3>Gobierno: linaje, catálogo y calidad</h3>
+<p>Cada registro lleva tres campos de linaje desde bronze: <code>_source_hash</code> (identifica el archivo de origen), <code>_ingested_at</code> (timestamp UTC de ingesta) y <code>_row_number</code> (posición en el CSV original). Esto permite rastrear cualquier cifra en gold hasta su registro crudo de campo.</p>
+<p>El catálogo vive en <strong>AWS Glue Data Catalog</strong>. Los dbt tests actúan como contrato de calidad: si la tasa de nulos en <code>timestamp</code> supera el 5% o aparecen valores negativos sin flag, el pipeline falla y SNS notifica al equipo antes de que los datos lleguen a gold.</p>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+  SECCIÓN 2 — SISTEMA IA
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Sección 2 de 4</div>
+  <h2>Sistema IA — Arquitectura del agente LUMI</h2>
+</div>
+
+<p>LUMI combina dos tipos de conocimiento: <strong>datos numéricos precisos</strong> del datalake (consumo, tendencias, anomalías) y <strong>contexto no estructurado</strong> del cliente (datasheets de máquinas, manuales, historial de incidencias). La arquitectura garantiza que el LLM nunca calcule cifras — solo interprete resultados ya computados.</p>
+
+<!-- Diagrama SVG: arquitectura del agente -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 920 400" xmlns="http://www.w3.org/2000/svg" font-family="'Space Grotesk', sans-serif">
+
+  <!-- Usuario -->
+  <rect x="10" y="170" width="110" height="60" rx="4" fill="#1C2B3A" stroke="#374151"/>
+  <text x="65" y="194" text-anchor="middle" font-size="11" fill="white" font-weight="600">USUARIO</text>
+  <text x="65" y="210" text-anchor="middle" font-size="10" fill="#9CA3AF">ENRG App</text>
+  <text x="65" y="224" text-anchor="middle" font-size="9" fill="#6B7280">¿Por qué subió</text>
+
+  <!-- Router / Orchestrator -->
+  <rect x="150" y="150" width="130" height="100" rx="4" fill="#EDE9FE" stroke="#7C3AED" stroke-width="2"/>
+  <text x="215" y="178" text-anchor="middle" font-size="11" fill="#7C3AED" font-weight="700">ORQUESTADOR</text>
+  <text x="215" y="194" text-anchor="middle" font-size="10" fill="#374151">LangGraph</text>
+  <text x="215" y="210" text-anchor="middle" font-size="9" fill="#6B7280">Decide qué tools</text>
+  <text x="215" y="224" text-anchor="middle" font-size="9" fill="#6B7280">llamar y en qué orden</text>
+  <text x="215" y="238" text-anchor="middle" font-size="9" fill="#6B7280">Guarda estado</text>
+
+  <!-- Tool 1: Data queries -->
+  <rect x="320" y="40" width="160" height="80" rx="4" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="1.5"/>
+  <text x="400" y="64" text-anchor="middle" font-size="11" fill="#1D4ED8" font-weight="700">TOOL: DATA QUERIES</text>
+  <text x="400" y="80" text-anchor="middle" font-size="9" fill="#374151">Athena SQL → Parquet gold</text>
+  <text x="400" y="94" text-anchor="middle" font-size="9" fill="#374151">consumo_mensual()</text>
+  <text x="400" y="108" text-anchor="middle" font-size="9" fill="#374151">analisis_solar()  etc.</text>
+
+  <!-- Tool 2: RAG -->
+  <rect x="320" y="160" width="160" height="80" rx="4" fill="#E6F4EC" stroke="#1B7A3E" stroke-width="1.5"/>
+  <text x="400" y="184" text-anchor="middle" font-size="11" fill="#1B7A3E" font-weight="700">TOOL: RAG</text>
+  <text x="400" y="200" text-anchor="middle" font-size="9" fill="#374151">OpenSearch semántico</text>
+  <text x="400" y="216" text-anchor="middle" font-size="9" fill="#374151">Datasheets · manuales</text>
+  <text x="400" y="230" text-anchor="middle" font-size="9" fill="#374151">filtro por cliente_id</text>
+
+  <!-- Tool 3: Insight engine -->
+  <rect x="320" y="280" width="160" height="80" rx="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+  <text x="400" y="304" text-anchor="middle" font-size="11" fill="#D97706" font-weight="700">TOOL: INSIGHTS</text>
+  <text x="400" y="320" text-anchor="middle" font-size="9" fill="#374151">Anomalías automáticas</text>
+  <text x="400" y="336" text-anchor="middle" font-size="9" fill="#374151">Outliers · gaps · tendencias</text>
+  <text x="400" y="350" text-anchor="middle" font-size="9" fill="#374151">Pre-computado en gold</text>
+
+  <!-- Guardrail / Assembler -->
+  <rect x="530" y="150" width="140" height="100" rx="4" fill="#FEE2E2" stroke="#B91C1C" stroke-width="2"/>
+  <text x="600" y="175" text-anchor="middle" font-size="11" fill="#B91C1C" font-weight="700">GUARDRAIL</text>
+  <text x="600" y="191" text-anchor="middle" font-size="10" fill="#374151">Ensamblador</text>
+  <text x="600" y="207" text-anchor="middle" font-size="9" fill="#374151">Solo cifras de tools</text>
+  <text x="600" y="221" text-anchor="middle" font-size="9" fill="#374151">LLM no calcula</text>
+  <text x="600" y="237" text-anchor="middle" font-size="9" fill="#374151">Prompt con resultados</text>
+
+  <!-- LLM -->
+  <rect x="720" y="150" width="130" height="100" rx="4" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2"/>
+  <text x="785" y="178" text-anchor="middle" font-size="11" fill="#7C3AED" font-weight="700">LLM</text>
+  <text x="785" y="194" text-anchor="middle" font-size="10" fill="#374151">Claude / GPT</text>
+  <text x="785" y="210" text-anchor="middle" font-size="9" fill="#374151">Recibe cifras YA</text>
+  <text x="785" y="224" text-anchor="middle" font-size="9" fill="#374151">calculadas</text>
+  <text x="785" y="238" text-anchor="middle" font-size="9" fill="#374151">Solo redacta</text>
+
+  <!-- Respuesta -->
+  <rect x="870" y="170" width="40" height="60" rx="4" fill="#1C2B3A"/>
+  <text x="890" y="197" text-anchor="middle" font-size="9" fill="white" transform="rotate(-90,890,197)">RESPUESTA</text>
+
+  <!-- Flechas -->
+  <defs>
+    <marker id="a1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7C3AED"/></marker>
+    <marker id="a2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1D4ED8"/></marker>
+    <marker id="a3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1B7A3E"/></marker>
+    <marker id="a4" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#D97706"/></marker>
+    <marker id="a5" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#B91C1C"/></marker>
+    <marker id="a6" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6B7280"/></marker>
+  </defs>
+
+  <line x1="120" y1="200" x2="148" y2="200" stroke="#7C3AED" stroke-width="2" marker-end="url(#a1)"/>
+  <line x1="280" y1="185" x2="318" y2="100" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#a2)"/>
+  <line x1="280" y1="200" x2="318" y2="200" stroke="#1B7A3E" stroke-width="1.5" marker-end="url(#a3)"/>
+  <line x1="280" y1="215" x2="318" y2="308" stroke="#D97706" stroke-width="1.5" marker-end="url(#a4)"/>
+  <line x1="480" y1="80" x2="528" y2="175" stroke="#1D4ED8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a5)"/>
+  <line x1="480" y1="200" x2="528" y2="200" stroke="#1B7A3E" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a5)"/>
+  <line x1="480" y1="310" x2="528" y2="225" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a5)"/>
+  <line x1="670" y1="200" x2="718" y2="200" stroke="#B91C1C" stroke-width="2" marker-end="url(#a1)"/>
+  <line x1="850" y1="200" x2="868" y2="200" stroke="#6B7280" stroke-width="2" marker-end="url(#a6)"/>
+
+  <!-- Label flechas dashed -->
+  <text x="503" y="158" text-anchor="middle" font-size="9" fill="#6B7280">resultados</text>
+  <text x="503" y="168" text-anchor="middle" font-size="9" fill="#6B7280">ya calculados</text>
+
+</svg>
+<div class="diagram-caption">Fig. 2 — Arquitectura del agente LUMI. El guardrail garantiza que el LLM reciba cifras pre-computadas por los tools, nunca las calcule por su cuenta.</div>
+</div>
+
+<h3>Cómo evitar respuestas inventadas sobre cifras</h3>
+<p>Este es el riesgo central de cualquier agente sobre datos numéricos. La solución tiene tres capas:</p>
+<p><strong>1. Separación estructural:</strong> el LLM y las funciones de cálculo son componentes distintos. El LLM nunca tiene acceso directo a los datos — solo recibe strings con resultados ya calculados por el data layer (Athena/Parquet).</p>
+<p><strong>2. System prompt restrictivo:</strong> el prompt prohíbe explícitamente inventar o inferir cifras. Si el contexto entregado no contiene el número que el usuario pide, el agente responde "No tengo ese dato disponible."</p>
+<p><strong>3. Trazabilidad en respuesta:</strong> cada cifra en la respuesta puede rastrearse a la función que la generó. En producción, las respuestas incluyen una nota de fuente (<em>"según datos silver al 30/06/2026"</em>) que permite auditar.</p>
+
+<h3>Ejemplo de extremo a extremo</h3>
+<p><em>Pregunta: "¿Por qué subió mi factura en junio?" — CLI-001 Textiles del Valle</em></p>
+
+<div class="flow-steps">
+  <div class="flow-step">
+    <div class="flow-num">1</div>
+    <div class="flow-content">
+      <strong>Router (LangGraph)</strong> recibe la pregunta y determina que necesita: consumo mensual, desglose por franja horaria, y contexto del cliente. <span class="flow-tag athena">Athena</span>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">2</div>
+    <div class="flow-content">
+      <strong>Tool: data_queries</strong> ejecuta <code>consumo_mensual("CLI-001")</code> → mayo: 283,556 kWh / junio: 318,857 kWh / delta: +12.4%. Ejecuta <code>comparacion_mayo_junio_detalle()</code> → franja noche subió +36,095 kWh. <span class="flow-tag athena">SQL → Parquet</span>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">3</div>
+    <div class="flow-content">
+      <strong>Tool: RAG</strong> busca en OpenSearch documentos de CLI-001 con query "turno nocturno compresores" → recupera un fragmento del datasheet del compresor tornillo 75 kW que menciona el consumo en arranque. <span class="flow-tag check">RAG filtrado por cliente_id</span>
+    </div>
+  </div>
+  <div class="flow-step highlight">
+    <div class="flow-num">4</div>
+    <div class="flow-content">
+      <strong>Guardrail / Ensamblador</strong> construye el system prompt con todas las cifras ya calculadas. El LLM recibe: "consumo mayo = 283,556 kWh, junio = 318,857 kWh, delta = +12.4%, aumento concentrado en franja noche 18-24h: +36,095 kWh…" <span class="flow-tag guard">LLM no calcula</span>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">5</div>
+    <div class="flow-content">
+      <strong>LLM</strong> redacta la respuesta usando solo las cifras entregadas: interpreta el patrón, cruza con el contexto de la textilera y el datasheet del compresor, y da una hipótesis de causa con recomendación. <span class="flow-tag llm">Solo redacción</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+  SECCIÓN 3 — OPERACIÓN
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Sección 3 de 4</div>
+  <h2>Operación — Calidad, costos y seguridad</h2>
+</div>
+
+<h3>Evaluación de calidad del agente</h3>
+<table>
+  <tr><th>Dimensión</th><th>Métrica</th><th>Implementación</th></tr>
+  <tr>
+    <td>Cifras correctas</td>
+    <td>% de cifras en respuesta que coinciden con la consulta fuente</td>
+    <td>Test automatizado: extraer números de respuesta y comparar con resultado del tool</td>
+  </tr>
+  <tr>
+    <td>Alucinación</td>
+    <td>% de respuestas con cifras no presentes en el contexto entregado</td>
+    <td>Regex sobre respuesta vs dict de resultados; umbral: 0 tolerancia</td>
+  </tr>
+  <tr>
+    <td>Relevancia</td>
+    <td>RAGAS faithfulness + answer relevancy</td>
+    <td>Evaluar muestra semanal con LLM-as-judge sobre dataset de preguntas conocidas</td>
+  </tr>
+  <tr>
+    <td>Latencia</td>
+    <td>p95 tiempo de respuesta</td>
+    <td>CloudWatch metric; alerta si p95 &gt; 8s</td>
+  </tr>
+  <tr>
+    <td>Cobertura de tools</td>
+    <td>% preguntas que lograron invocar al menos 1 tool</td>
+    <td>Log de cada ejecución en DynamoDB; alerta si baja del 90%</td>
+  </tr>
+</table>
+
+<h3>Control de costos de inferencia</h3>
+<p><strong>El riesgo principal:</strong> un agente que llame al LLM para cada consulta a +200 clientes × 24 horas puede volverse inviable rápidamente. Tres controles:</p>
+<p><strong>Caché de contexto:</strong> el resumen ejecutivo del cliente se calcula una vez al día y se cachea en ElastiCache. Las preguntas recurrentes del mismo cliente en el mismo día reutilizan el contexto sin re-ejecutar las queries de Athena.</p>
+<p><strong>Modelo por tarea:</strong> el router usa un modelo pequeño (Haiku / GPT-3.5) para clasificar la intención. Solo cuando la pregunta requiere síntesis compleja se invoca el modelo grande (Sonnet / GPT-4). El 70% de las preguntas típicas se resuelven con el modelo pequeño.</p>
+<p><strong>Presupuesto por cliente:</strong> cada cliente tiene un cupo mensual de tokens configurable. Si se supera, el agente responde con las métricas precalculadas en gold sin llamar al LLM.</p>
+
+<h3>Seguridad — qué datos ve el agente y de qué cliente</h3>
+<div class="tradeoff-row">
+  <div class="tradeoff-box pro">
+    <h4>Aislamiento por cliente_id</h4>
+    <ul>
+      <li>Todas las queries del data layer incluyen <code>WHERE cliente_id = ?</code> como parámetro obligatorio — nunca como opción</li>
+      <li>El RAG filtra por <code>cliente_id</code> antes de hacer el vector search — un cliente no puede ver documentos de otro</li>
+      <li>AWS Lake Formation controla acceso a nivel de fila en las tablas gold</li>
+      <li>El agente no recibe el contexto de otros clientes en ningún paso del flujo</li>
+    </ul>
+  </div>
+  <div class="tradeoff-box con">
+    <h4>Limitaciones conocidas y mitigación</h4>
+    <ul>
+      <li>El historial de conversación en memoria podría filtrar datos entre sesiones → se limpia al cerrar sesión</li>
+      <li>El LLM podría memorizar patrones de clientes en fine-tuning → no se hace fine-tuning con datos de clientes</li>
+      <li>Logs de CloudWatch contienen queries con datos → acceso restringido a equipo de ops con MFA</li>
+      <li>Auditoría: cada llamada al agente se registra con cliente_id, pregunta y tools invocados</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+  SECCIÓN 4 — ROADMAP
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">Sección 4 de 4</div>
+  <h2>Roadmap — 3 personas · 6 meses</h2>
+</div>
+
+<p>Con 3 personas el criterio de priorización es uno: <strong>¿qué desbloquea lo siguiente?</strong> Sin datos confiables no hay agente. Sin agente no hay valor diferencial. El lujo (insights proactivos, fine-tuning, multi-idioma) va al final.</p>
+
+<div class="roadmap">
+  <div class="roadmap-phase p1">
+    <div class="phase-label">FASE 1 · Meses 1–2</div>
+    <h4>Datos confiables en producción</h4>
+    <ul>
+      <li>Pipeline bronze → silver en AWS (Glue + Step Functions)</li>
+      <li>Catálogo Glue + dbt tests como contrato</li>
+      <li>Quarantine con alertas SNS</li>
+      <li>Ingesta de contexto de clientes (CRM)</li>
+      <li>Dashboards básicos en ENRG (Athena → QuickSight)</li>
+      <li>Gestión de accesos (Lake Formation)</li>
+    </ul>
+    <div class="why">Sin esto no hay nada. Un agente sobre datos sucios da respuestas equivocadas — peor que no tener agente.</div>
+  </div>
+
+  <div class="roadmap-phase p2">
+    <div class="phase-label">FASE 2 · Meses 3–4</div>
+    <h4>Gold layer + LUMI v1</h4>
+    <ul>
+      <li>Modelos dbt en gold (consumo diario, mensual, benchmarks)</li>
+      <li>Data access layer (funciones de consulta)</li>
+      <li>LUMI v1: responde las 5 preguntas más frecuentes</li>
+      <li>Ingesta y chunking de documentos (datasheets)</li>
+      <li>RAG con OpenSearch, filtro por cliente_id</li>
+      <li>API REST del agente (Lambda + API Gateway)</li>
+    </ul>
+    <div class="why">El agente sin gold layer confiable no puede responder con cifras reales. Primero los modelos, luego el chat.</div>
+  </div>
+
+  <div class="roadmap-phase p3">
+    <div class="phase-label">FASE 3 · Meses 5–6</div>
+    <h4>Operación + motor de insights</h4>
+    <ul>
+      <li>Evaluación automática del agente (RAGAS)</li>
+      <li>Motor de insights proactivos (anomalías sin pregunta)</li>
+      <li>Control de costos (caché + modelo routing)</li>
+      <li>Cobertura completa de fuentes (más clientes)</li>
+      <li>Reportes automáticos mensuales por cliente</li>
+      <li>Feedback loop: usuarios marcan respuestas incorrectas</li>
+    </ul>
+    <div class="why">Con el agente funcionando, el foco pasa a confiabilidad y escala. Los insights proactivos son el diferencial competitivo de ENRG.</div>
+  </div>
+</div>
+
+<footer>
+  Documento de arquitectura — Parte B · Prueba Técnica Líder de Datos e IA · ERCO Energía<br>
+  Stack: AWS (S3, Glue, Athena, Step Functions, OpenSearch, Lambda, Lake Formation) · dbt · LangGraph · Claude API
+</footer>
+
+</body>
+</html>
