@@ -4,8 +4,8 @@
 **IA utilizada:** gpt_oss:2b (Ollama) / Claude (Anthropic) — ver declaración al final
 
 ### La documentación relacionada con el desarrollo del proyecto estan en:
-- [Diagnostico y hallazgos del EDA →](html/A_hallazgos.html)
-- [Diseño, arquitectura y forma de la solución (con su roadmap) →](html/B_arquitectura.html)
+- [Diagnostico y hallazgos del EDA →](html/A_hallazgos.pdf)
+- [Diseño, arquitectura y forma de la solución (con su roadmap) →](html/B_arquitectura.pdf)
 
 ---
 
